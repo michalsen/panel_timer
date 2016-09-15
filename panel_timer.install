@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * SN Tracking install file.
+ */
+
+
+function panel_timer_schema() {
+
+ $schema['panel_timer'] = array(
+    'description'     => 'Day / Hour timer for panels.',
+      'fields'        => array(
+       'panel_id'    => array(
+         'type'       => 'int',
+         'length'     => 6,
+         'not null'   => FALSE),
+       'start_time'    => array(
+         'type'       => 'int',
+         'length'     => 6,
+         'not null'   => FALSE),
+       'end_time'    => array(
+         'type'       => 'int',
+         'length'     => 6,
+         'not null'   => FALSE),
+       'days'    => array(
+         'type'       => 'varchar',
+         'length'     => 100,
+         'not null'   => FALSE),
+     ),
+  );
+
+    return $schema;
+
+}
