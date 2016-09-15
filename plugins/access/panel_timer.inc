@@ -10,6 +10,7 @@ $plugin = array(
   'callback'         => 'panel_timer_ctools_access_check',
   'summary'          => 'panel_timer_ctools_access_summary',
   'settings form'    => 'panel_timer_ctools_access_settings',
+  'required context' => new ctools_context_required(t('Token'), 'token'),
 );
 
 
@@ -106,10 +107,19 @@ function panel_timer_ctools_access_summary($conf, $context) {
 }
 
 /**
- * Check for access.
+ * Render callback function.
+ *
+ * @param $subtype
+ * @param $conf
+ * @param $args
+ * @param $context
+ * @return stdClass
  */
-function panel_timer_ctools_access_check($conf, $context) {
-
+function panel_timer_ctools_access_check($subtype, $conf, $args, $context) {
+  dpm($subtype);
+  dpm($args);
+  dpm($conf);
+  dpm($context);
      $query = db_query('SELECT panel_id, start_time, end_time, days FROM {panel_timer}')->fetchAll();
      dpm($query);
      foreach ($query as $key => $row) {
