@@ -10,7 +10,7 @@ $plugin = array(
   'callback'         => 'panel_timer_ctools_access_check',
   'summary'          => 'panel_timer_ctools_access_summary',
   'settings form'    => 'panel_timer_ctools_access_settings',
-  'required context' => new ctools_context_required(t('Token'), 'token'),
+  'required context' => new ctools_context_required(t('Node'), 'node'),
 );
 
 
