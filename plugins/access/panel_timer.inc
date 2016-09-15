@@ -29,7 +29,7 @@ function panel_timer_ctools_access_settings(&$form, &$form_state) {
   //dpm($timer_query);
 
   $days = array(
-    0 => 'Sunday',
+    7 => 'Sunday',
     1 => 'Monday',
     2 => 'Tuesday',
     3 => 'Wednesday',
@@ -37,6 +37,7 @@ function panel_timer_ctools_access_settings(&$form, &$form_state) {
     5 => 'Friday',
     6 => 'Saturday'
   );
+
   $form['settings']['startTime'] = array(
     '#title'         => t('Start Time'),
     '#type'          => 'textfield',
@@ -44,6 +45,7 @@ function panel_timer_ctools_access_settings(&$form, &$form_state) {
     '#default_value' => $timer_query->start_time,
     '#required'      => TRUE,
   );
+
   $form['settings']['endTime'] = array(
     '#title'         => t('End Time'),
     '#type'          => 'textfield',
@@ -51,6 +53,7 @@ function panel_timer_ctools_access_settings(&$form, &$form_state) {
     '#default_value' => $timer_query->end_time,
     '#required'      => TRUE,
   );
+
   $days_set = json_decode($timer_query->days);
 
   $form['settings']['days'] = array(
@@ -116,16 +119,26 @@ function panel_timer_ctools_access_summary($conf, $context) {
  * @return stdClass
  */
 function panel_timer_ctools_access_check($subtype, $conf, $args, $context) {
-  dpm($subtype);
-  dpm($args);
-  dpm($conf);
-  dpm($context);
+  $panels = panels_get_current_page_display();
+  $pids = array_keys($panels->content);
+  $current_day = date('N', time());
+  $current_time = date('Gi', time());
      $query = db_query('SELECT panel_id, start_time, end_time, days FROM {panel_timer}')->fetchAll();
-     dpm($query);
      foreach ($query as $key => $row) {
-       dpm('panel_id: ' . $row->panel_id);
+       if (in_array($row->panel_id, $pids)) {
+         $days = json_decode($row->days);
+         $start_time = $row->start_time;
+         $end_time = $row->end_time;
+       }
      }
 
-      return TRUE;
+    if ($current_time > $start_time &&
+        $current_time < $end_time   &&
+        in_array($current_day, $days)) {
+           return TRUE;
+       }
+         else {
+           return FALSE;
+         }
 
 }
